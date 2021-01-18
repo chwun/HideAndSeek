@@ -3042,7 +3042,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StartPosition: {x: 13, y: 3, z: -18}
-  PlayerPrefab: {fileID: 5401550121522520931, guid: 88c261ef8d87d8f47828924cf14e06e2, type: 3}
+  PlayerPrefab: {fileID: 8280173811282286566, guid: be7211e890b350b41a74851f0dcb5817, type: 3}
 --- !u!4 &835445534
 Transform:
   m_ObjectHideFlags: 0

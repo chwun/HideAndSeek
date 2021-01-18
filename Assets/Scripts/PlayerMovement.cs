@@ -7,10 +7,14 @@ public class PlayerMovement : MonoBehaviour
 	private CharacterController characterController;
 
 	private float currentXRotation = 0f;
+	private Vector3 currentVelocity;
 
 	public Camera PlayerCam;
-	public float RotationSpeed;
-	public float MoveSpeed;
+	public float RotationSpeed = 100f;
+	public float WalkingSpeed = 6f;
+	public float RunningSpeed = 12f;
+	public float JumpHeight = 5f;
+	public float Gravity = -9.81f;
 
 
 	// Start is called before the first frame update
@@ -30,11 +34,40 @@ public class PlayerMovement : MonoBehaviour
 
 	private void Move()
 	{
+		bool isGrounded = characterController.isGrounded;
+		if (isGrounded && currentVelocity.y < 0)
+		{
+			currentVelocity.y = 0f;
+		}
+
+		bool isRunning = Input.GetKey(KeyCode.LeftShift);
+
 		float horizontalMove = Input.GetAxis("Horizontal");
 		float verticalMove = Input.GetAxis("Vertical");
 
-		Vector3 move = transform.forward * verticalMove + transform.right * horizontalMove;
-		characterController.Move(move * MoveSpeed * Time.deltaTime);
+		Vector3 moveDirection = (transform.forward * verticalMove + transform.right * horizontalMove) * Time.deltaTime;
+
+		if (isRunning)
+		{
+			moveDirection *= RunningSpeed;
+		}
+		else{
+			moveDirection *= WalkingSpeed;
+		}
+
+		if (!isGrounded)
+		{
+			moveDirection *= 0.7f;
+		}
+
+		if (isGrounded && Input.GetButton("Jump"))
+		{
+			currentVelocity.y += Mathf.Sqrt(JumpHeight * -1f * Gravity);
+		}
+
+		currentVelocity.y += 2f * Gravity * Time.deltaTime;
+
+		characterController.Move(moveDirection + currentVelocity * Time.deltaTime);
 	}
 
 	private void Rotate()
@@ -48,6 +81,5 @@ public class PlayerMovement : MonoBehaviour
 		PlayerCam.transform.localRotation = Quaternion.Euler(currentXRotation, 0f, 0f);
 
 		transform.Rotate(Vector3.up * mouseX);
-
 	}
 }
