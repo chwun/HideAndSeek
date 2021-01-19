@@ -11,9 +11,9 @@ public class PlayerMovement : MonoBehaviour
 
 	public Camera PlayerCam;
 	public float RotationSpeed = 100f;
-	public float WalkingSpeed = 6f;
-	public float RunningSpeed = 12f;
-	public float JumpHeight = 5f;
+	public float WalkingSpeed = 4f;
+	public float RunningSpeed = 8f;
+	public float JumpHeight = 1f;
 	public float Gravity = -9.81f;
 
 
@@ -62,7 +62,7 @@ public class PlayerMovement : MonoBehaviour
 
 		if (isGrounded && Input.GetButton("Jump"))
 		{
-			currentVelocity.y += Mathf.Sqrt(JumpHeight * -1f * Gravity);
+			currentVelocity.y += JumpHeight * -0.8f * Gravity;
 		}
 
 		currentVelocity.y += 2f * Gravity * Time.deltaTime;
