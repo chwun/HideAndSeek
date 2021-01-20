@@ -59,6 +59,8 @@ sysinfo.txt
 crashlytics-build.properties
 
 .vscode/
+
 Assets/TextMesh Pro/Documentation/
 
 UserSettings/
+ProjectSettings/Packages/com.unity.probuilder/Settings.json
