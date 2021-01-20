@@ -58,5 +58,7 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
-/.vscode
-/Assets/TextMesh Pro/Documentation
+.vscode/
+Assets/TextMesh Pro/Documentation/
+
+UserSettings/
