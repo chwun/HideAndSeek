@@ -16,7 +16,7 @@ namespace HideAndSeek
 
 		private void SpawnPlayer()
 		{
-			player = Instantiate(PlayerPrefab, SpawnPosition.transform.position, Quaternion.identity);
+			player = Instantiate(PlayerPrefab, SpawnPosition.transform.position, SpawnPosition.transform.rotation);
 			player.name = "Player";
 		}
 	}
