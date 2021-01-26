@@ -2,86 +2,93 @@ using UnityEngine;
 
 namespace HideAndSeek
 {
-	public class PlayerMovement : MonoBehaviour
-	{
-		private CharacterController characterController;
+    public class PlayerMovement : MonoBehaviour
+    {
+        private CharacterController characterController;
 
-		private float currentXRotation = 0f;
-		private Vector3 currentVelocity;
+        private float currentXRotation = 0f;
+        private Vector3 currentVelocity;
 
-		public Camera PlayerCam;
-		public float RotationSpeed = 100f;
-		public float WalkingSpeed = 4f;
-		public float RunningSpeed = 8f;
-		public float JumpHeight = 1f;
-		public float Gravity = -9.81f;
+        public Camera PlayerCam;
+        public float RotationSpeed = 100f;
+        public float PlayerAcceleration = 10f;
+        public float WalkingSpeed = 4f;
+        public float RunningSpeed = 8f;
+        public float JumpHeight = 1.1f;
+        public float Gravity = -9.81f;
 
 
-		// Start is called before the first frame update
-		void Start()
-		{
-			characterController = GetComponent<CharacterController>();
 
-			Cursor.lockState = CursorLockMode.Locked;
-		}
+        // Start is called before the first frame update
+        void Start()
+        {
+            characterController = GetComponent<CharacterController>();
 
-		// Update is called once per frame
-		void Update()
-		{
-			Rotate();
-			Move();
-		}
+            Cursor.lockState = CursorLockMode.Locked;
 
-		private void Move()
-		{
-			bool isGrounded = characterController.isGrounded;
-			if (isGrounded && currentVelocity.y < 0)
-			{
-				currentVelocity.y = 0f;
-			}
+            characterController.detectCollisions = true;
+        }
 
-			bool isRunning = Input.GetKey(KeyCode.LeftShift);
+        // Update is called once per frame
+        void Update()
+        {
+            Rotate();
+            Move();
+        }
 
-			float horizontalMove = Input.GetAxis("Horizontal");
-			float verticalMove = Input.GetAxis("Vertical");
+        
 
-			Vector3 moveDirection = (transform.forward * verticalMove + transform.right * horizontalMove) * Time.deltaTime;
+        private void Move()
+        {
+            bool isGrounded = characterController.isGrounded;
+            if (isGrounded && currentVelocity.y < 0)
+            {
+                currentVelocity.y = 0f;
+            }
 
-			if (isRunning)
-			{
-				moveDirection *= RunningSpeed;
-			}
-			else
-			{
-				moveDirection *= WalkingSpeed;
-			}
+            bool isRunning = Input.GetKey(KeyCode.LeftShift);
 
-			if (!isGrounded)
-			{
-				moveDirection *= 0.7f;
-			}
+            float horizontalMove = Input.GetAxis("Horizontal");
+            float verticalMove = Input.GetAxis("Vertical");
 
-			if (isGrounded && Input.GetButton("Jump"))
-			{
-				currentVelocity.y += JumpHeight * -0.8f * Gravity;
-			}
+            Vector3 moveDirection = (transform.forward * verticalMove + transform.right * horizontalMove) * Time.deltaTime;
 
-			currentVelocity.y += 2f * Gravity * Time.deltaTime;
+            if (isRunning)
+            {
+                moveDirection *= RunningSpeed;
+            }
+            else
+            {
+                moveDirection *= WalkingSpeed;
+            }
 
-			characterController.Move(moveDirection + currentVelocity * Time.deltaTime);
-		}
+            if (!isGrounded)
+            {
+                moveDirection *= 0.7f;
+            }
 
-		private void Rotate()
-		{
-			float mouseX = Input.GetAxis("Mouse X") * RotationSpeed * Time.deltaTime;
-			float mouseY = Input.GetAxis("Mouse Y") * RotationSpeed * Time.deltaTime;
+            if (isGrounded && Input.GetButton("Jump"))
+            {
+                currentVelocity.y += Mathf.Sqrt(-1f * Gravity * JumpHeight);
+            }
 
-			currentXRotation -= mouseY;
-			currentXRotation = Mathf.Clamp(currentXRotation, -90f, 90f);
+            currentVelocity.y += Gravity * Time.deltaTime;
 
-			PlayerCam.transform.localRotation = Quaternion.Euler(currentXRotation, 0f, 0f);
+            characterController.Move(moveDirection + currentVelocity * Time.deltaTime);
 
-			transform.Rotate(Vector3.up * mouseX);
-		}
-	}
+        }
+
+        private void Rotate()
+        {
+            float mouseX = Input.GetAxis("Mouse X") * RotationSpeed * Time.deltaTime;
+            float mouseY = Input.GetAxis("Mouse Y") * RotationSpeed * Time.deltaTime;
+
+            currentXRotation -= mouseY;
+            currentXRotation = Mathf.Clamp(currentXRotation, -90f, 90f);
+
+            PlayerCam.transform.localRotation = Quaternion.Euler(currentXRotation, 0f, 0f);
+
+            transform.Rotate(Vector3.up * mouseX);
+        }
+    }
 }

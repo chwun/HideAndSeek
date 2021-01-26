@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace HideAndSeek
@@ -5,19 +7,61 @@ namespace HideAndSeek
 	public class GameManager : MonoBehaviour
 	{
 		public GameObject PlayerPrefab;
-		public GameObject SpawnPosition;
+		public GameObject BotPrefab;
+		public GameObject SpawnPositionSearchingPlayers;
+		public GameObject SpawnPositionHidingPlayers;
 
-		private GameObject player;
+		private List<Player> hidingPlayers;
+		private List<Player> searchingPlayers;
 
 		void Start()
 		{
-			SpawnPlayer();
+			SpawnSearchingPlayers();
+			SpawnHidingPlayers();
 		}
 
-		private void SpawnPlayer()
+		private void SpawnSearchingPlayers()
 		{
-			player = Instantiate(PlayerPrefab, SpawnPosition.transform.position, SpawnPosition.transform.rotation);
-			player.name = "Player";
+			searchingPlayers = new List<Player>();
+			GameObject playerObject = Instantiate(PlayerPrefab, SpawnPositionSearchingPlayers.transform.position, SpawnPositionSearchingPlayers.transform.rotation);
+			playerObject.name = "SearchingPlayer";
+			searchingPlayers.Add(new Player(playerObject, "Jannis"));
+		}
+
+		private void SpawnHidingPlayers()
+		{
+			hidingPlayers = new List<Player>();
+			
+			for (int i = 0; i < 20; i++)
+			{
+				GameObject playerObject = Instantiate(BotPrefab, SpawnPositionHidingPlayers.transform.position + new Vector3(Random.Range(-10f, 10f), 0, Random.Range(-10f, 10f)), SpawnPositionHidingPlayers.transform.rotation);
+				playerObject.name = "HidingPlayer";
+				hidingPlayers.Add(new Player(playerObject, "Bot " + i));
+			}
+
+			
+		}
+
+		public void Catch(GameObject searching, GameObject hiding)
+		{
+			Player hidingPlayer = hidingPlayers.Find(x => x.PlayerObject == hiding);
+			Player searchingPlayer = searchingPlayers.Find(x => x.PlayerObject == searching);
+
+			if (hidingPlayer.IsAlive)
+			{
+				hidingPlayer.PlayerObject.GetComponent<BotMovement>().Catch();
+				hidingPlayer.IsAlive = false;
+				searchingPlayer.Points++;
+				Debug.Log(searchingPlayer.Name + " hat " + hidingPlayer.Name + " gefangen.");
+			}
+
+			if (hidingPlayers.All(x => !x.IsAlive))
+			{
+				foreach(Player player in searchingPlayers)
+				{
+					Debug.Log(player.Name + ": " + player.Points + " Punkte");
+				}
+			}
 		}
 	}
 }
