@@ -6,13 +6,16 @@ namespace HideAndSeek
 {
 	public class DoorTrigger : MonoBehaviour
 	{
-		public DoorEvent DoorEvent { get; private set; }
+		public bool PlayerDetected { get; private set; }
+
+		private int numberOfDetectedPlayers = 0;
 
 		public void OnTriggerEnter(Collider other)
 		{
 			if (other.tag.Contains("Player"))
 			{
-				DoorEvent = DoorEvent.PlayerDetected;
+				numberOfDetectedPlayers++;
+				PlayerDetected = true;
 			}
 		}
 
@@ -20,14 +23,14 @@ namespace HideAndSeek
 		{
 			if (other.tag.Contains("Player"))
 			{
-				DoorEvent = DoorEvent.None;
+				numberOfDetectedPlayers--;
+
+				if (numberOfDetectedPlayers <= 0)
+				{
+					numberOfDetectedPlayers = 0;
+					PlayerDetected = false;
+				}
 			}
 		}
-	}
-
-	public enum DoorEvent
-	{
-		None,
-		PlayerDetected
 	}
 }

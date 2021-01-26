@@ -19,7 +19,7 @@ namespace HideAndSeek
 
 		void Update()
 		{
-			if (Trigger.DoorEvent == DoorEvent.PlayerDetected)
+			if (Trigger.PlayerDetected)
 			{
 				if (!openDoor)
 				{
