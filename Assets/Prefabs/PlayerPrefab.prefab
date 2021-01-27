@@ -333,9 +333,8 @@ MonoBehaviour:
   PlayerAcceleration: 10
   WalkingSpeed: 4
   RunningSpeed: 8
-  JumpHeight: 1
+  JumpHeight: 1.5
   Gravity: -9.81
-  IsSeeker: 0
 --- !u!114 &6122782665811059985
 MonoBehaviour:
   m_ObjectHideFlags: 0
