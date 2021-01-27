@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace HideAndSeek
+namespace HideAndSeek.Interactions.SlidingDoor
 {
 	public class DoorTrigger : MonoBehaviour
 	{
