@@ -311,7 +311,7 @@ CharacterController:
   serializedVersion: 2
   m_Height: 2
   m_Radius: 0.5
-  m_SlopeLimit: 40
+  m_SlopeLimit: 46
   m_StepOffset: 0.5
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
@@ -330,10 +330,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerCam: {fileID: 5574496993271303234}
   RotationSpeed: 125
-  PlayerAcceleration: 10
-  WalkingSpeed: 4
-  RunningSpeed: 8
-  JumpHeight: 1.5
+  WalkingSpeed: 5
+  RunningSpeed: 10
+  SneakingSpeed: 2
+  JumpHeight: 1.1
   Gravity: -9.81
 --- !u!114 &6122782665811059985
 MonoBehaviour:
