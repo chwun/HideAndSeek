@@ -40,14 +40,13 @@ namespace HideAndSeek.Items
 		private void SpawnItemOnPosition(Transform spawnPosition)
 		{
 			SceneItemTemplate sceneItemTemplate = GetNextRandomSceneItemTemplate();
-			Item newItem = new Item(nextItemId++, sceneItemTemplate.Type);
+			Item newItem = new Item(nextItemId++, sceneItemTemplate.Type, sceneItemTemplate.ItemSprite);
 
 			GameObject itemObject = Instantiate(sceneItemTemplate.ItemPrefab, spawnPosition.position, spawnPosition.rotation, ItemsContainer.transform);
 			itemObject.name = $"Item_{newItem.Id}";
 			itemObject.GetComponent<ItemController>().SetItem(newItem);
 
 			SpawnedItems[newItem.Id] = itemObject;
-			Debug.Log($"Item #{newItem.Id} ({newItem.Type}) spawned");
 		}
 
 		private SceneItemTemplate GetNextRandomSceneItemTemplate()
@@ -62,8 +61,6 @@ namespace HideAndSeek.Items
 
 			Destroy(itemObject);
 			SpawnedItems.Remove(itemId);
-
-			Debug.Log($"Item #{itemId} removed");
 
 			// TODO: evtl. nach gewisser Zeit neues Item spawnen?
 		}

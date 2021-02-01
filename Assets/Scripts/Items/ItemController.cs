@@ -19,8 +19,6 @@ namespace HideAndSeek.Items
 			{
 				itemTrigger.TriggeredPlayer.Inventory.AddItem(item);
 				ItemSpawner.Instance.RemoveItem(item.Id);
-
-				Debug.Log($"Player collected item #{item.Id}");
 			}
 		}
 

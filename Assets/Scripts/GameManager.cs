@@ -27,6 +27,7 @@ namespace HideAndSeek
 			Player player = new Player(playerObject, "Jannis", true);
 			searchingPlayers.Add(player);
 			playerObject.GetComponent<PlayerManager>().SetPlayer(player);
+			playerObject.GetComponent<PlayerUI>().SetPlayer(player);
 			playerObject.name = "SearchingPlayer";
 		}
 

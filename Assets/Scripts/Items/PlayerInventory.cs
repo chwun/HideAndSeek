@@ -1,3 +1,5 @@
+using System;
+
 namespace HideAndSeek.Items
 {
 	public class PlayerInventory
@@ -7,6 +9,9 @@ namespace HideAndSeek.Items
 		public Item[] Items { get; private set; }
 
 		public int SelectedItemSlot { get; private set; }
+
+		public event EventHandler InventoryItemsChanged;
+		public event EventHandler InventorySelectionChanged;
 
 		public PlayerInventory()
 		{
@@ -28,16 +33,38 @@ namespace HideAndSeek.Items
 				// if no free slot: replace currently select item slot
 				Items[SelectedItemSlot] = item;
 			}
+
+			InventoryItemsChanged?.Invoke(this, EventArgs.Empty);
 		}
 
 		public void SelectNextItemSlot()
 		{
 			SelectedItemSlot = (SelectedItemSlot + 1) % InventorySize;
+			InventorySelectionChanged?.Invoke(this, EventArgs.Empty);
 		}
 
 		public void SelectPreviousItemSlot()
 		{
 			SelectedItemSlot = (SelectedItemSlot + InventorySize - 1) % InventorySize;
+			InventorySelectionChanged?.Invoke(this, EventArgs.Empty);
+		}
+
+		public void SelectSpecificItemSlot(int slotIndex)
+		{
+			if (slotIndex < InventorySize)
+			{
+				SelectedItemSlot = slotIndex;
+				InventorySelectionChanged?.Invoke(this, EventArgs.Empty);
+			}
+		}
+
+		public Item GetAndRemoveSelectedItem()
+		{
+			Item item = Items[SelectedItemSlot];
+			Items[SelectedItemSlot] = null;
+			InventoryItemsChanged?.Invoke(this, EventArgs.Empty);
+
+			return item;
 		}
 
 		private int GetNextFreeItemSlot()

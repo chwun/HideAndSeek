@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace HideAndSeek.Items
 {
 	public class Item
@@ -6,10 +8,13 @@ namespace HideAndSeek.Items
 
 		public ItemType Type { get; }
 
-		public Item(int id, ItemType type)
+		public Sprite Sprite { get; }
+
+		public Item(int id, ItemType type, Sprite sprite)
 		{
 			Id = id;
 			Type = type;
+			Sprite = sprite;
 		}
 	}
 }

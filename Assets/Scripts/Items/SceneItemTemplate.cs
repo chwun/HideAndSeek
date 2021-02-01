@@ -9,5 +9,7 @@ namespace HideAndSeek.Items
 		public ItemType Type;
 
 		public GameObject ItemPrefab;
+
+		public Sprite ItemSprite;
 	}
 }
