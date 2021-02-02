@@ -10,9 +10,11 @@ namespace HideAndSeek
 		public GameObject BotPrefab;
 		public GameObject SpawnPositionSearchingPlayers;
 		public GameObject SpawnPositionHidingPlayers;
+		public int NumBots = 0;
 
 		private List<Player> hidingPlayers;
 		private List<Player> searchingPlayers;
+		private int maxNumBots = 20;
 
 		void Start()
 		{
@@ -34,8 +36,9 @@ namespace HideAndSeek
 		private void SpawnHidingPlayers()
 		{
 			hidingPlayers = new List<Player>();
+			NumBots = Mathf.RoundToInt(Mathf.Clamp(NumBots, 0, maxNumBots));
 
-			for (int i = 0; i < 20; i++)
+			for (int i = 0; i < NumBots; i++)
 			{
 				GameObject playerObject = Instantiate(BotPrefab, SpawnPositionHidingPlayers.transform.position + new Vector3(Random.Range(-10f, 10f), 0, Random.Range(-10f, 10f)), SpawnPositionHidingPlayers.transform.rotation);
 				Player player = new Player(playerObject, "Bot " + i, false);
