@@ -19,6 +19,21 @@ namespace HideAndSeek.MainMenu
 			InitInputField();
 		}
 
+		private void Update()
+		{
+			if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+			{
+				if (buttonOk.interactable)
+				{
+					OnOk();
+				}
+			}
+			else if (Input.GetKeyDown(KeyCode.Escape))
+			{
+				OnCancel();
+			}
+		}
+
 		private void InitInputField()
 		{
 			if (!PlayerPrefs.HasKey(PlayerPrefsPlayerNameKey))
