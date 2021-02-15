@@ -56,7 +56,7 @@ namespace HideAndSeek.Network
 			}
 
 			// prevents players from joining when game is already in progress
-			if (SceneManager.GetActiveScene().name != menuScene)
+			if (SceneManager.GetActiveScene().path != menuScene)
 			{
 				conn.Disconnect();
 				return;
