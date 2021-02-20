@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -33,18 +34,18 @@ namespace HideAndSeek.Items
 		{
 			foreach (Transform spawnPosition in SpawnPositions)
 			{
-				SpawnItemOnPosition(spawnPosition);
+				SpawnItemOnPosition(spawnPosition.position, spawnPosition.rotation);
 			}
 		}
 
-		private void SpawnItemOnPosition(Transform spawnPosition)
+		private void SpawnItemOnPosition(Vector3 spawnPosition, Quaternion spawnRotation)
 		{
 			SceneItemTemplate sceneItemTemplate = GetNextRandomSceneItemTemplate();
 			Item newItem = new Item(nextItemId++, sceneItemTemplate.Type, sceneItemTemplate.ItemSprite);
 
-			GameObject itemObject = Instantiate(sceneItemTemplate.ItemPrefab, spawnPosition.position, spawnPosition.rotation, ItemsContainer.transform);
+			GameObject itemObject = Instantiate(sceneItemTemplate.ItemPrefab, spawnPosition, spawnRotation, ItemsContainer.transform);
 			itemObject.name = $"Item_{newItem.Id}";
-			itemObject.GetComponent<ItemController>().SetItem(newItem);
+			itemObject.GetComponentInChildren<ItemTrigger>().SetItem(newItem);
 
 			SpawnedItems[newItem.Id] = itemObject;
 		}
@@ -55,14 +56,22 @@ namespace HideAndSeek.Items
 			return SceneItemTemplates[randomListPosition];
 		}
 
+		private IEnumerator RespawnItemOnPosition(Vector3 spawnPosition, Quaternion spawnRotation, float delay)
+		{
+			yield return new WaitForSeconds(delay);
+
+			SpawnItemOnPosition(spawnPosition, spawnRotation);
+		}
+
 		public void RemoveItem(int itemId)
 		{
 			GameObject itemObject = SpawnedItems[itemId];
+			Vector3 itemPosition = itemObject.transform.position;
+			Quaternion itemRotation = itemObject.transform.rotation;
 
 			Destroy(itemObject);
-			SpawnedItems.Remove(itemId);
-
-			// TODO: evtl. nach gewisser Zeit neues Item spawnen?
+			// SpawnedItems.Remove(itemId);
+			StartCoroutine(RespawnItemOnPosition(itemPosition, itemRotation, 2f));
 		}
 	}
 }

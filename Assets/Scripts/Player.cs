@@ -30,22 +30,8 @@ namespace HideAndSeek
 
 		public void TriggerSelectedInventoryItem()
 		{
-			Item item = Inventory.GetAndRemoveSelectedItem();
-
-			if (item != null)
-			{
-				// TODO: Items auslösen, evtl. Aktionen in PlayerManager usw.
-				switch (item.Type)
-				{
-					case ItemType.Type1:
-						Debug.Log("Item of type Type1 triggered");
-						break;
-
-					case ItemType.Type2:
-						Debug.Log("Item of type Type2 triggered");
-						break;
-				}
-			}
+			new ItemAction(this, Inventory.GetSelectedItem()).Use();
+			// ItemType itemType = Inventory.RemoveItem();
 		}
 	}
 }

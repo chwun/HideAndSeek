@@ -19,7 +19,7 @@ namespace HideAndSeek.Items
 			SelectedItemSlot = 0;
 		}
 
-		public void AddItem(Item item)
+		public bool AddItem(Item item)
 		{
 			int nextFreeItemSlot = GetNextFreeItemSlot();
 
@@ -27,14 +27,14 @@ namespace HideAndSeek.Items
 			{
 				// if free slot is found: add item to this slot
 				Items[nextFreeItemSlot] = item;
+				InventoryItemsChanged?.Invoke(this, EventArgs.Empty);
+				return true;
 			}
 			else
 			{
-				// if no free slot: replace currently select item slot
-				Items[SelectedItemSlot] = item;
+				// if no free slot: do nothing
+				return false;
 			}
-
-			InventoryItemsChanged?.Invoke(this, EventArgs.Empty);
 		}
 
 		public void SelectNextItemSlot()
@@ -65,6 +65,11 @@ namespace HideAndSeek.Items
 			InventoryItemsChanged?.Invoke(this, EventArgs.Empty);
 
 			return item;
+		}
+
+		public Item GetSelectedItem()
+		{
+			return Items[SelectedItemSlot];
 		}
 
 		private int GetNextFreeItemSlot()
