@@ -15,8 +15,6 @@ namespace HideAndSeek.MainMenu
 			networkManager.StartHost();
 
 			gameObject.SetActive(false);
-
-			// TODO: show lobby ...
 		}
 
 		public void OnJoin()

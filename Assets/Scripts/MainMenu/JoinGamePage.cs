@@ -14,8 +14,6 @@ namespace HideAndSeek.MainMenu
 		[SerializeField] private TMP_InputField inputFieldIpAddress;
 		[SerializeField] private Button buttonOk;
 
-		private const string PlayerPrefsLastHostIpKey = "LastHostIp";
-
 		private void Start()
 		{
 			InitInputField();
@@ -50,12 +48,12 @@ namespace HideAndSeek.MainMenu
 
 		private void InitInputField()
 		{
-			if (!PlayerPrefs.HasKey(PlayerPrefsLastHostIpKey))
+			if (!PlayerPrefs.HasKey(Constants.PlayerPrefsLastHostIpKey))
 			{
 				return;
 			}
 
-			string storedHostIp = PlayerPrefs.GetString(PlayerPrefsLastHostIpKey);
+			string storedHostIp = PlayerPrefs.GetString(Constants.PlayerPrefsLastHostIpKey);
 			inputFieldIpAddress.text = storedHostIp;
 
 			RefreshOkButtonState(storedHostIp);
@@ -70,7 +68,7 @@ namespace HideAndSeek.MainMenu
 
 		private void SaveHostIp()
 		{
-			PlayerPrefs.SetString(PlayerPrefsLastHostIpKey, inputFieldIpAddress.text);
+			PlayerPrefs.SetString(Constants.PlayerPrefsLastHostIpKey, inputFieldIpAddress.text);
 		}
 
 		private void OnClientConnected()

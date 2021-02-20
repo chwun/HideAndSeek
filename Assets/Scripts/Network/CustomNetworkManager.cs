@@ -12,8 +12,11 @@ namespace HideAndSeek.Network
 	{
 
 		[Header("Custom")]
+		[SerializeField] private int minPlayers = 2;
 		[Scene] [SerializeField] private string menuScene;
 		[SerializeField] private NetworkRoomPlayer roomPlayerPrefab;
+
+		public List<NetworkRoomPlayer> RoomPlayers { get; } = new List<NetworkRoomPlayer>();
 
 		public static event Action OnClientConnected;
 		public static event Action OnClientDisconnected;
@@ -63,14 +66,56 @@ namespace HideAndSeek.Network
 			}
 		}
 
+		public override void OnServerDisconnect(NetworkConnection conn)
+		{
+			if (conn.identity != null)
+			{
+				var player = conn.identity.GetComponent<NetworkRoomPlayer>();
+
+				RoomPlayers.Remove(player);
+
+				NotifyHostOfReadyState();
+			}
+
+			base.OnServerDisconnect(conn);
+		}
+
+		public override void OnStopServer()
+		{
+			RoomPlayers.Clear();
+		}
+
 		public override void OnServerAddPlayer(NetworkConnection conn)
 		{
 			if (SceneManager.GetActiveScene().path == menuScene)
 			{
+				bool isHost = !RoomPlayers.Any();
+
 				NetworkRoomPlayer roomPlayerInstance = Instantiate(roomPlayerPrefab);
+				roomPlayerInstance.IsHost = isHost;
 
 				NetworkServer.AddPlayerForConnection(conn, roomPlayerInstance.gameObject);
 			}
+		}
+
+		public void NotifyHostOfReadyState()
+		{
+			RoomPlayers.FirstOrDefault(x => x.IsHost)?.HandleReadyToStart(IsReadyToStart());
+		}
+
+		private bool IsReadyToStart()
+		{
+			if (numPlayers < minPlayers)
+			{
+				return false;
+			}
+
+			if (RoomPlayers.Any(player => !player.IsReady))
+			{
+				return false;
+			}
+
+			return true;
 		}
 	}
 }

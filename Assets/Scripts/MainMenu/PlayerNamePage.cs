@@ -12,8 +12,6 @@ namespace HideAndSeek.MainMenu
 		[SerializeField] private TMP_InputField inputFieldPlayerName;
 		[SerializeField] private Button buttonOk;
 
-		private const string PlayerPrefsPlayerNameKey = "PlayerName";
-
 		private void Start()
 		{
 			InitInputField();
@@ -36,12 +34,12 @@ namespace HideAndSeek.MainMenu
 
 		private void InitInputField()
 		{
-			if (!PlayerPrefs.HasKey(PlayerPrefsPlayerNameKey))
+			if (!PlayerPrefs.HasKey(Constants.PlayerPrefsPlayerNameKey))
 			{
 				return;
 			}
 
-			string storedPlayerName = PlayerPrefs.GetString(PlayerPrefsPlayerNameKey);
+			string storedPlayerName = PlayerPrefs.GetString(Constants.PlayerPrefsPlayerNameKey);
 			inputFieldPlayerName.text = storedPlayerName;
 
 			RefreshOkButtonState(storedPlayerName);
@@ -54,7 +52,7 @@ namespace HideAndSeek.MainMenu
 
 		private void SavePlayerName()
 		{
-			PlayerPrefs.SetString(PlayerPrefsPlayerNameKey, inputFieldPlayerName.text);
+			PlayerPrefs.SetString(Constants.PlayerPrefsPlayerNameKey, inputFieldPlayerName.text);
 		}
 
 		public void OnPlayerNameInputChanged(string playerName)
