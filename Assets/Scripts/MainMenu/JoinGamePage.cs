@@ -36,14 +36,14 @@ namespace HideAndSeek.MainMenu
 
 		private void OnEnable()
 		{
-			CustomNetworkManager.OnClientConnected += OnClientConnected;
-			CustomNetworkManager.OnClientDisconnected += OnClientDisconnected;
+			CustomNetworkManager.ClientConnected += OnClientConnected;
+			CustomNetworkManager.ClientDisconnected += OnClientDisconnected;
 		}
 
 		private void OnDisable()
 		{
-			CustomNetworkManager.OnClientConnected -= OnClientConnected;
-			CustomNetworkManager.OnClientDisconnected -= OnClientDisconnected;
+			CustomNetworkManager.ClientConnected -= OnClientConnected;
+			CustomNetworkManager.ClientDisconnected -= OnClientDisconnected;
 		}
 
 		private void InitInputField()

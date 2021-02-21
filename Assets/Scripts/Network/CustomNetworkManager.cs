@@ -18,8 +18,9 @@ namespace HideAndSeek.Network
 
 		public List<NetworkRoomPlayer> RoomPlayers { get; } = new List<NetworkRoomPlayer>();
 
-		public static event Action OnClientConnected;
-		public static event Action OnClientDisconnected;
+		public static event Action ClientConnected;
+		public static event Action ClientDisconnected;
+		public static event Action ReturnToGameMenu;
 
 		public override void OnStartServer()
 		{
@@ -40,14 +41,15 @@ namespace HideAndSeek.Network
 		{
 			base.OnClientConnect(conn);
 
-			OnClientConnected?.Invoke();
+			ClientConnected?.Invoke();
 		}
 
 		public override void OnClientDisconnect(NetworkConnection conn)
 		{
 			base.OnClientDisconnect(conn);
 
-			OnClientDisconnected?.Invoke();
+			ClientDisconnected?.Invoke();
+			ReturnToGameMenu?.Invoke();
 		}
 
 		public override void OnServerConnect(NetworkConnection conn)
@@ -83,6 +85,7 @@ namespace HideAndSeek.Network
 		public override void OnStopServer()
 		{
 			RoomPlayers.Clear();
+			ReturnToGameMenu?.Invoke();
 		}
 
 		public override void OnServerAddPlayer(NetworkConnection conn)
