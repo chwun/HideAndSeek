@@ -10,7 +10,7 @@ namespace HideAndSeek.MainMenu
 		[SerializeField] private GameObject mainMenuPage;
 		[SerializeField] private GameObject joinGamePage;
 
-		private void OnEnable()
+		private void Start()
 		{
 			CustomNetworkManager.ReturnToGameMenu += OnReturnToGameMenu;
 		}
