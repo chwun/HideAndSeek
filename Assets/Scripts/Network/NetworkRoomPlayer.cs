@@ -53,6 +53,11 @@ namespace HideAndSeek
 			}
 		}
 
+		private static Color GreenColor = (Color)new Color32(8, 150, 23, 255);
+		private static Color RedColor = (Color)new Color32(150, 4, 10, 255);
+		private const string GreenColorHex = "#089617";
+		private const string RedColorHex = "#96040A";
+
 		public override void OnStartAuthority()
 		{
 			CmdSetDisplayName(PlayerPrefs.GetString(Constants.PlayerPrefsPlayerNameKey));
@@ -98,18 +103,18 @@ namespace HideAndSeek
 				{
 					playerNameTexts[i].text = Room.RoomPlayers[i].DisplayName;
 					playerReadyImages[i].GetComponent<Image>().color = Room.RoomPlayers[i].IsReady
-						? (Color)new Color32(8, 150, 23, 255)
-						: (Color)new Color32(150, 4, 10, 255);
+						? GreenColor
+						: RedColor;
 				}
 			}
 
 			if (IsReady)
 			{
-				buttonReady.GetComponentInChildren<TMP_Text>().text = "<color=#089617>ready</color>";
+				buttonReady.GetComponentInChildren<TMP_Text>().text = $"<color={GreenColorHex}>ready</color>";
 			}
 			else
 			{
-				buttonReady.GetComponentInChildren<TMP_Text>().text = "<color=#96040A>Not ready</color>";
+				buttonReady.GetComponentInChildren<TMP_Text>().text = $"<color={RedColorHex}>Not ready</color>";
 			}
 		}
 
