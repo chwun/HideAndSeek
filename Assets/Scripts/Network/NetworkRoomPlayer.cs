@@ -36,7 +36,6 @@ namespace HideAndSeek
 			set
 			{
 				isHost = value;
-				buttonStartGame.gameObject.SetActive(isHost);
 			}
 		}
 
@@ -59,6 +58,7 @@ namespace HideAndSeek
 			CmdSetDisplayName(PlayerPrefs.GetString(Constants.PlayerPrefsPlayerNameKey));
 
 			lobbyUI.SetActive(true);
+			buttonStartGame.gameObject.SetActive(IsHost);
 		}
 
 		public override void OnStartClient()
@@ -101,6 +101,15 @@ namespace HideAndSeek
 						? (Color)new Color32(8, 150, 23, 255)
 						: (Color)new Color32(150, 4, 10, 255);
 				}
+			}
+
+			if (IsReady)
+			{
+				buttonReady.GetComponentInChildren<TMP_Text>().text = "<color=#089617>ready</color>";
+			}
+			else
+			{
+				buttonReady.GetComponentInChildren<TMP_Text>().text = "<color=#96040A>Not ready</color>";
 			}
 		}
 
@@ -157,15 +166,6 @@ namespace HideAndSeek
 		public void OnReady()
 		{
 			CmdReadyUp();
-
-			if (IsReady)
-			{
-				buttonReady.GetComponentInChildren<TMP_Text>().text = "<color=#089617>ready</color>";
-			}
-			else
-			{
-				buttonReady.GetComponentInChildren<TMP_Text>().text = "<color=#96040A>Not ready</color>";
-			}
 		}
 
 		public void OnStartGame()
