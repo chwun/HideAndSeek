@@ -151,7 +151,7 @@ namespace HideAndSeek
 				return;
 			}
 
-			// TODO: start game, load scene, ...
+			Room.StartGame();
 		}
 
 		public void OnCancel()

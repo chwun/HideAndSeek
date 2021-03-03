@@ -16,7 +16,10 @@ namespace HideAndSeek.Network
 		[Scene] [SerializeField] private string menuScene;
 		[SerializeField] private NetworkRoomPlayer roomPlayerPrefab;
 
+		[SerializeField] private NetworkGamePlayer gamePlayerPrefab;
+
 		public List<NetworkRoomPlayer> RoomPlayers { get; } = new List<NetworkRoomPlayer>();
+		public List<NetworkGamePlayer> GamePlayers { get; } = new List<NetworkGamePlayer>();
 
 		public static event Action ClientConnected;
 		public static event Action ClientDisconnected;
@@ -119,6 +122,39 @@ namespace HideAndSeek.Network
 			}
 
 			return true;
+		}
+
+		public void StartGame()
+		{
+			if (SceneManager.GetActiveScene().path == menuScene)
+			{
+				if (!IsReadyToStart())
+				{
+					return;
+				}
+
+				ServerChangeScene("LevelTestMultiplayer");
+			}
+		}
+
+		public override void ServerChangeScene(string newSceneName)
+		{
+			// from menu to game
+			if ((SceneManager.GetActiveScene().path == menuScene) && (newSceneName.StartsWith("Level")))
+			{
+				for (int i = RoomPlayers.Count - 1; i >= 0; i--)
+				{
+					var conn = RoomPlayers[i].connectionToClient;
+					var gamePlayerInstance = Instantiate(gamePlayerPrefab);
+					gamePlayerInstance.SetDisplayName(RoomPlayers[i].DisplayName);
+
+					NetworkServer.Destroy(conn.identity.gameObject);
+
+					NetworkServer.ReplacePlayerForConnection(conn, gamePlayerInstance.gameObject, true);
+				}
+			}
+
+			base.ServerChangeScene(newSceneName);
 		}
 	}
 }
