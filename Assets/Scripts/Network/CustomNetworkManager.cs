@@ -17,13 +17,18 @@ namespace HideAndSeek.Network
 		[SerializeField] private NetworkRoomPlayer roomPlayerPrefab;
 
 		[SerializeField] private NetworkGamePlayer gamePlayerPrefab;
+		[SerializeField] private GameObject playerSpawnSystem;
 
+		[HideInInspector]
 		public List<NetworkRoomPlayer> RoomPlayers { get; } = new List<NetworkRoomPlayer>();
+
+		[HideInInspector]
 		public List<NetworkGamePlayer> GamePlayers { get; } = new List<NetworkGamePlayer>();
 
 		public static event Action ClientConnected;
 		public static event Action ClientDisconnected;
 		public static event Action ReturnToGameMenu;
+		public static event Action<NetworkConnection> OnServerReadied;
 
 		public override void OnStartServer()
 		{
@@ -155,6 +160,22 @@ namespace HideAndSeek.Network
 			}
 
 			base.ServerChangeScene(newSceneName);
+		}
+
+		public override void OnServerSceneChanged(string sceneName)
+		{
+			if (sceneName.StartsWith("Level"))
+			{
+				GameObject playerSpawnSystemInstance = Instantiate(playerSpawnSystem);
+				NetworkServer.Spawn(playerSpawnSystemInstance);
+			}
+		}
+
+		public override void OnServerReady(NetworkConnection conn)
+		{
+			base.OnServerReady(conn);
+
+			OnServerReadied?.Invoke(conn);
 		}
 	}
 }
